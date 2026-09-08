@@ -430,7 +430,7 @@ function vazio() {
   p.append(
     'Clique em ',
     b,
-    ' e depois no que precisa mudar na página. Os comentários ficam aqui, de várias páginas na mesma sessão, e saem juntos como prompt ou .md.'
+    ' e depois marque na página com comentários o que deseja registrar de mudança. Os comentários ficam aqui, de várias páginas na mesma sessão, no final copie o prompt gerado ou baixe em .md, adicionando na sua LLM e itere.'
   );
   return p;
 }

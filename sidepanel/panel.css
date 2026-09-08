@@ -426,6 +426,12 @@ button {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  /* Mesmo divisor do topo do rodapé. A margem negativa sangra a borda até as
+   * beiradas: a de cima é do container, que já é largura cheia, e sem isto esta
+   * ficaria recuada nos 16px de padding e as duas não pareceriam a mesma linha. */
+  margin: 0 -16px;
+  padding: 10px 16px 0;
+  border-top: 1px solid var(--borda);
 }
 
 .opcao {
