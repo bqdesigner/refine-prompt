@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Refine Prompt</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <header class="topo">
+      <div class="topo-linha">
+        <p class="rotulo">Refine Prompt</p>
+        <span class="contador" id="contador">0</span>
+      </div>
+      <p class="meta" id="meta">Nenhum comentário nesta sessão</p>
+    </header>
+
+    <p class="aviso" id="aviso" hidden></p>
+
+    <main class="historico" id="historico"></main>
+
+    <section class="compositor" id="compositor" hidden>
+      <p class="alvo" id="alvoRotulo"></p>
+      <textarea
+        id="texto"
+        rows="3"
+        placeholder="O que muda aqui?"
+        spellcheck="false"
+      ></textarea>
+      <div class="linha">
+        <button type="button" class="fantasma" id="cancelar">Cancelar</button>
+        <button type="button" class="primario" id="comentar" disabled>Salvar</button>
+      </div>
+    </section>
+
+    <details class="gaveta" id="gaveta">
+      <summary id="resumoGaveta">Ver prompt</summary>
+      <pre id="previa"></pre>
+    </details>
+
+    <footer class="acoes">
+      <button type="button" class="mira" id="mira" aria-pressed="false">
+        <svg viewBox="0 0 256 256" aria-hidden="true">
+          <line x1="128" y1="232" x2="128" y2="200" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+          <circle cx="128" cy="128" r="88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+          <line x1="128" y1="24" x2="128" y2="56" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+          <line x1="24" y1="128" x2="56" y2="128" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+          <line x1="232" y1="128" x2="200" y2="128" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+          <circle cx="128" cy="128" r="32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/>
+        </svg>
+        <span id="miraTexto">Selecionar elemento</span>
+      </button>
+
+      <div class="linha exportar">
+        <button type="button" class="primario" id="copiar" disabled>Copiar prompt</button>
+        <button type="button" class="fantasma" id="baixar" disabled>Baixar .md</button>
+      </div>
+
+      <div class="utilidades">
+        <label class="opcao">
+          <input type="checkbox" id="redigir" checked />
+          Ocultar dados sensíveis
+        </label>
+        <label class="opcao">
+          <input type="checkbox" id="seguir" />
+          Seguir navegação
+        </label>
+        <button type="button" class="texto" id="limpar" disabled>Limpar</button>
+      </div>
+    </footer>
+
+    <script type="module" src="panel.js"></script>
+  </body>
+</html>

@@ -1,0 +1,237 @@
+<!doctype html>
+<!--
+  Página de teste do Refine Prompt.
+
+  Não é vitrine: cada bloco aqui é o fixture de um problema conhecido, para
+  conferir os consertos sem depender de achar o caso na vida real. O que testar
+  está escrito na própria página.
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Refine Prompt - página de teste</title>
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 22px;
+        color: #16181c;
+        background: #f6f7f8;
+      }
+      header.topo {
+        position: fixed; inset: 0 0 auto 0; z-index: 10;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 14px 24px;
+        background: #fff;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+      }
+      header.topo b { font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; }
+      main { max-width: 880px; margin: 0 auto; padding: 84px 24px 160px; }
+      h1 { font-size: 24px; line-height: 32px; margin: 8px 0 4px; }
+      h2 { font-size: 15px; margin: 28px 0 8px; }
+      p.lead { color: rgba(0,0,0,0.55); margin: 0 0 8px; }
+      .card {
+        background: #fff; border: 1px solid rgba(0,0,0,0.07);
+        border-radius: 16px; padding: 16px 18px; margin: 10px 0;
+        box-shadow: 0 10px 30px -22px rgba(0,0,0,0.35);
+      }
+      .card h3 { margin: 0 0 4px; font-size: 14px; }
+      .card p { margin: 0; color: rgba(0,0,0,0.6); }
+      .btn {
+        border: 0; border-radius: 10px; padding: 9px 14px;
+        font: 600 13px/1 inherit; cursor: pointer;
+      }
+      .btn-primary { background: #008a00; color: #fff; }
+      .btn-ghost { background: rgba(0,0,0,0.05); color: rgba(0,0,0,0.7); }
+      .fchips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+      .chip {
+        border: 1px solid rgba(0,0,0,0.1); border-radius: 999px;
+        padding: 4px 10px; font-size: 12px; background: #fff;
+      }
+      label.campo { display: block; font-size: 12px; color: rgba(0,0,0,0.5); margin-top: 10px; }
+      label.campo input {
+        display: block; width: 100%; margin-top: 4px;
+        border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 9px 10px;
+        font: inherit;
+      }
+      .checklist { padding-left: 18px; color: rgba(0,0,0,0.7); }
+      .checklist code { background: rgba(0,0,0,0.06); border-radius: 4px; padding: 1px 4px; }
+
+      /* Fixture do bug do picker: o container não recebe evento de
+         ponteiro, os filhos recebem. O picker antigo pegava o elemento de
+         trás e selecionava a coisa errada, calado. */
+      footer.app-sign {
+        position: fixed; right: 18px; bottom: 14px; z-index: 9;
+        padding: 8px 12px; border-radius: 12px;
+        background: rgba(0,0,0,0.85); color: #fff; font-size: 12px;
+        pointer-events: none;
+      }
+      footer.app-sign a { pointer-events: auto; color: #3ee49a; }
+
+      /* Fixture do caso espelho: camada que cobre a viewport inteira só para
+         hospedar toast. Com pointer-events neutralizado, ela viraria o alvo em
+         qualquer ponto da tela se `passaVento()` não a tirasse da frente. */
+      .toast-layer {
+        position: fixed; inset: 0; z-index: 8;
+        pointer-events: none;
+        display: flex; align-items: flex-start; justify-content: center;
+        padding-top: 72px;
+      }
+      .toast {
+        pointer-events: auto;
+        background: #16181c; color: #fff; border-radius: 12px;
+        padding: 8px 14px; font-size: 12px; opacity: 0.9;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topo">
+      <b>Sistema de exemplo</b>
+      <button class="btn btn-ghost" id="sair">Sair</button>
+    </header>
+
+    <div class="toast-layer" aria-live="polite">
+      <div class="toast">Proposta salva</div>
+    </div>
+
+    <main>
+      <h1>Página de teste</h1>
+      <p class="lead">
+        Cada bloco abaixo existe para verificar um conserto específico. Abra o
+        Refine Prompt, comente e confira o resultado no prompt.
+      </p>
+
+      <h2>1. Elementos repetidos (desambiguação do seletor)</h2>
+      <p class="lead">
+        Os três blocos abaixo têm a mesma classe <code>.fchips</code>. Comente
+        num chip do bloco <b>Visão</b>: o seletor do prompt precisa apontar só
+        para aquele bloco.
+      </p>
+      <aside class="picker">
+        <div class="side-block card">
+          <h3>Visão</h3>
+          <div class="fchips">
+            <span class="chip">Lista</span>
+            <span class="chip">Resumo</span>
+          </div>
+        </div>
+        <div class="side-block card">
+          <h3>Origem</h3>
+          <div class="fchips">
+            <span class="chip">Marca A</span>
+            <span class="chip">Marca B</span>
+          </div>
+        </div>
+        <div class="side-block card">
+          <h3>Produto</h3>
+          <div class="fchips">
+            <span class="chip">Plano anual</span>
+            <span class="chip">Plano mensal</span>
+          </div>
+        </div>
+      </aside>
+
+      <h2>2. Dado sensível (máscara na captura)</h2>
+      <p class="lead">
+        Comente no cartão inteiro com "Ocultar dados sensíveis" ligado: nada do
+        que está aqui pode aparecer cru no prompt. Os dados são inventados.
+      </p>
+      <div class="card" id="cliente">
+        <h3>Pessoa de exemplo</h3>
+        <p>CPF 123.456.789-01 · CNPJ 12.345.678/0001-95</p>
+        <p>pessoa@exemplo.com.br · (11) 98765-4321</p>
+        <p>Cadastro 4839201847 · Total de R$ 1.284,90 em 12x</p>
+        <label class="campo">
+          Buscar pessoa
+          <input id="buscaInput" type="search" placeholder="CPF, CNPJ ou nome" />
+        </label>
+      </div>
+
+      <h2>3. Formulário com origem no código</h2>
+      <p class="lead">
+        Página estática, então não há <code>arquivo.tsx:linha</code> - o prompt
+        precisa cair no bloco de referência com o HTML sanitizado. Para testar
+        o caminho do React, rode contra um app React em modo de
+        desenvolvimento (<code>npm run dev</code>).
+      </p>
+      <form class="card form-login">
+        <h3>Entrar na conta</h3>
+        <label class="campo">Senha <input type="password" /></label>
+        <p style="margin-top: 12px">
+          <button class="btn btn-primary" data-testid="submit-login" type="button">
+            Entrar
+          </button>
+        </p>
+      </form>
+
+      <h2>4. Shadow DOM</h2>
+      <p class="lead">
+        O widget abaixo vive num shadow root aberto. O tooltip precisa mostrar
+        o elemento de dentro, e o prompt precisa avisar que o seletor não
+        alcança de fora.
+      </p>
+      <meu-widget></meu-widget>
+
+      <h2>5. Camadas que não recebem clique</h2>
+      <ul class="checklist">
+        <li>
+          O <b>rodapé escuro</b> no canto de baixo tem
+          <code>pointer-events: none</code> (e os links dentro dele, não). Ele
+          precisa ser selecionável - era o bug que falhava calado.
+        </li>
+        <li>
+          O <b>toast "Proposta salva"</b> mora numa camada que cobre a tela
+          inteira. Passar o mouse no meio da página precisa continuar pegando o
+          conteúdo, não a camada. <code>Alt</code> cicla para alcançá-la.
+        </li>
+        <li>
+          O <b>cabeçalho fixo</b> não pode ficar embaixo do painel: o side panel
+          nativo encolhe a viewport de verdade.
+        </li>
+      </ul>
+
+      <h2>6. Sessão entre páginas</h2>
+      <p class="lead">
+        Ligue "Seguir navegação", comente aqui, vá para outra página e comente
+        de novo: o prompt sai com as duas, separadas por página.
+      </p>
+      <p>
+        <a href="https://example.com" class="btn btn-ghost" style="text-decoration: none">
+          Ir para outra página
+        </a>
+      </p>
+    </main>
+
+    <footer class="app-sign">
+      Feito por
+      <a href="https://github.com/bqdesigner" target="_blank" rel="noopener">Bruno Queirós</a>
+    </footer>
+
+    <script>
+      class MeuWidget extends HTMLElement {
+        connectedCallback() {
+          const raiz = this.attachShadow({ mode: 'open' });
+          const estilo = document.createElement('style');
+          estilo.textContent =
+            '.box{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:16px 18px;font:14px/22px Inter,Arial,sans-serif}' +
+            '.box b{display:block;font-size:14px}' +
+            '.box button{margin-top:8px;border:0;border-radius:10px;padding:9px 14px;background:#008a00;color:#fff;font:600 13px/1 inherit;cursor:pointer}';
+          const box = document.createElement('div');
+          box.className = 'box';
+          const titulo = document.createElement('b');
+          titulo.textContent = 'Widget em shadow DOM';
+          const p = document.createElement('p');
+          p.textContent = 'Este bloco está dentro de um shadow root aberto.';
+          const b = document.createElement('button');
+          b.textContent = 'Abrir detalhes';
+          box.append(titulo, p, b);
+          raiz.append(estilo, box);
+        }
+      }
+      customElements.define('meu-widget', MeuWidget);
+    </script>
+  </body>
+</html>

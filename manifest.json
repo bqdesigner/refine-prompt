@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Refine Prompt",
+  "version": "0.1.1",
+  "description": "Comenta elementos de qualquer página, atravessando páginas na mesma sessão, e exporta os pedidos como prompt ou .md.",
+  "permissions": ["activeTab", "scripting", "sidePanel", "storage"],
+  "optional_host_permissions": ["*://*/*"],
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/index.html"
+  },
+  "action": {
+    "default_title": "Refine Prompt",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
