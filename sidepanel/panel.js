@@ -430,7 +430,7 @@ function vazio() {
   p.append(
     'Clique em ',
     b,
-    ' e depois marque na página com comentários o que deseja registrar de mudança. Os comentários ficam aqui, de várias páginas na mesma sessão, no final copie o prompt gerado ou baixe em .md, adicionando na sua LLM e itere.'
+    ' e depois marque na página com comentários o que deseja registrar de mudança. Os comentários ficam aqui, de várias páginas na mesma sessão, no final copie o prompt gerado ou baixe em .md, adicionando na sua LLM para iterações mais precisas.'
   );
   return p;
 }
