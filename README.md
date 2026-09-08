@@ -78,6 +78,11 @@ dígitos no HTML capturado, no texto do elemento **e na URL** (query string
 carrega id de contrato com frequência). Desligue só em página que é sua -
 protótipo local, `localhost`. Valor em real, data e id curto passam intactos.
 
+Trocar a opção no meio da sessão é seguro: o agrupamento por página não usa a
+URL exibida (ver a regra 9 da arquitetura), então ligar ou desligar não parte a
+sessão em duas. O que já foi capturado não muda - a máscara vale da próxima
+captura em diante.
+
 ## O que sai no prompt
 
 Cabeçalho de uma linha, mais duas notas condicionais, e um item por
@@ -207,7 +212,7 @@ documenta a dependência. **Arquivo novo em `content/` precisa entrar na lista
 `FILES`** ou o `executeScript` falha inteiro e sem mensagem - `tools/check.py`
 pega exatamente isso.
 
-Oito regras que vale preservar:
+Nove regras que vale preservar:
 
 1. **Nada que a extensão pendura em `window` sobe exceção.** Todo listener vai
    embrulhado em `RP.seguro` (00-ns.js), que engole a exceção e manda uma vez
@@ -234,8 +239,16 @@ Oito regras que vale preservar:
    descritor serializável do elemento, nunca uma referência ao nó.
 5. **O painel nunca toca o DOM da página direto.** Só o protocolo de mensagens
    (`ping`/`opcoes`/`picker`/`foco`/`pins`/`limpar` de ida,
-   `pronto`/`comentario`/`picker-desligou` de volta). É o que vai permitir suportar
-   iframe numa v2 sem reescrever a UI.
+   `pronto`/`comentario`/`comentario-editado`/`picker-desligou` de volta). É o
+   que vai permitir suportar iframe numa v2 sem reescrever a UI.
+
+   **Da volta, o painel só ouve a aba ativa da própria janela** - a mesma que
+   `enviarAba` fala. `chrome.runtime.onMessage` entrega o que qualquer content
+   script mandou, a qualquer painel aberto: sem o filtro, uma aba de fundo que
+   termina de carregar reescreve a página de referência (os pins da aba à vista
+   somem e os comentários dela passam a contar como "outra página"), e com dois
+   painéis abertos o mesmo comentário é gravado duas vezes. O service worker
+   fecha a outra metade, não injetando em aba que não está à vista.
 6. **A caixa de comentário redeclara o que herda.** Ela vive no shadow root do
    overlay, e `pointer-events`, `cursor` e `user-select` são propriedades
    herdadas: o host é `pointer-events: none` (para não engolir clique da
@@ -252,6 +265,16 @@ Oito regras que vale preservar:
 8. **Nenhum `chrome.*` sem passar por `RP.vivo()`/`RP.tentar()`.** Recarregar a
    extensão órfã o content script e todo `chrome.*` passa a lançar; sem a guarda,
    isso aparece como erro aleatório no meio da revisão.
+9. **Duas páginas são a mesma pela `chave`, nunca pela URL exibida.** A URL
+   exibida passa pela máscara de dado sensível, então ela muda quando a opção é
+   ligada ou desligada no meio da sessão - e a mesma página passaria a contar
+   como duas, com dois grupos no relatório e pins que não casam. A `chave` é o
+   hash da URL crua, montado em `99-boot.js`; quem compara é `mesmaPaginaQue`
+   (`sessao.js`), e todo agrupamento passa por ela. Hash e não a URL crua porque
+   a chave é gravada junto do comentário, e URL crua é justamente o que a
+   máscara existe para não gravar - aqui só se compara por igualdade. A queda
+   para a URL cobre comentário gravado por versão anterior à chave: a sessão
+   fica em `chrome.storage.local` e sobrevive à atualização da extensão.
 
 ### Verificar sem instalar
 
