@@ -34,6 +34,7 @@ const TODAS_ORIGENS = { origins: ['*://*/*'] };
 const $ = (id) => document.getElementById(id);
 
 const el = {
+  versao: $('versao'),
   contador: $('contador'),
   meta: $('meta'),
   aviso: $('aviso'),
@@ -94,6 +95,8 @@ async function iniciar() {
   const guardado = await carregar();
   sessao = guardado.sessao;
   opcoes = guardado.opcoes;
+
+  el.versao.textContent = '• V ' + chrome.runtime.getManifest().version;
 
   el.redigir.checked = !!opcoes.redigir;
   el.seguir.checked = await chrome.permissions.contains(TODAS_ORIGENS);
